@@ -11,7 +11,7 @@ const navItems = [
   { path: '/', icon: Home, label: 'Home' },
   { path: '/produtos', icon: Smartphone, label: 'Produtos' },
   { path: '/ofertas', icon: Tag, label: 'Ofertas' },
-  { path: '/sobre', icon: Settings, label: 'Configurações' },
+  { path: '/configuracoes', icon: Settings, label: 'Configurações' },
 ];
 
 export default function Sidebar({ onSearchOpen, onCartOpen, navigationVisible, onNavigationReveal }) {

@@ -11,6 +11,7 @@ import Offers from './pages/Offers';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import LegalPage from './pages/LegalPage';
+import AdminSettings from './pages/AdminSettings';
 import './styles/global.css';
 
 export default function App() {
@@ -27,6 +28,7 @@ export default function App() {
                 <Route path="categorias" element={<Categories />} />
                 <Route path="ofertas" element={<Offers />} />
                 <Route path="sobre" element={<About />} />
+                <Route path="configuracoes" element={<AdminSettings />} />
                 <Route path="contato" element={<Contact />} />
                 <Route path="politica-de-privacidade" element={<LegalPage page="privacidade" />} />
                 <Route path="termos-de-uso" element={<LegalPage page="termos" />} />
