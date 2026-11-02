@@ -48,7 +48,7 @@ export default function Home() {
         </div>
 
         <button className="hero-menu-btn" aria-label="logo power">
-          <img src="/public/logopower.png" alt="Menu" />
+          <img src="/logopower.png" alt="Menu" />
         </button>
       </section>
 
