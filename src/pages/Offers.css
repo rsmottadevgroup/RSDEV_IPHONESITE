@@ -1,0 +1,94 @@
+.offers-page {
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.offers-hero {
+  padding: 5rem 0 3rem;
+  text-align: center;
+  background: linear-gradient(180deg, rgba(255, 107, 0, 0.1), transparent);
+}
+
+.offers-hero h1 {
+  font-size: clamp(2.2rem, 5vw, 3.5rem);
+  margin-bottom: 0.5rem;
+}
+
+.offers-hero p {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.offers-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 2.5rem;
+  margin-bottom: 3rem;
+  background: rgba(255, 107, 0, 0.08);
+  border: 1px solid rgba(255, 107, 0, 0.2);
+  border-radius: var(--radius-md);
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.offers-banner h2 {
+  font-size: 1.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.offers-banner p {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+}
+
+.offers-timer {
+  display: flex;
+  gap: 1rem;
+}
+
+.timer-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 0.75rem 1.15rem;
+  border-radius: 12px;
+  min-width: 64px;
+}
+
+.timer-block span {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--orange-vibrant);
+}
+
+.timer-block small {
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+}
+
+.offers-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  .offers-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 800px) {
+  .offers-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .offers-grid {
+    grid-template-columns: 1fr;
+  }
+}
