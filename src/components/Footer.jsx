@@ -9,8 +9,7 @@ export default function Footer() {
       <div className="container footer-content">
         <div className="footer-brand">
           <div className="footer-logo">
-            <img src="/logopower.png" style={{ width: '80%', height: 'auto' }}></img>
-            
+            <img src="/logopower.png" style={{ width: '80%', height: 'auto' }} alt="PowerCell" />
           </div>
           <p>Tecnologia de ponta, em cada detalhe. Design que inspira.</p>
           <div className="footer-socials">
@@ -33,15 +32,15 @@ export default function Footer() {
             <h4 className="sans">Institucional</h4>
             <Link to="/sobre">Sobre nós</Link>
             <Link to="/contato">Contato</Link>
-            <a href="#">Política de Privacidade</a>
-            <a href="#">Termos de Uso</a>
+            <Link to="/politica-de-privacidade">Política de Privacidade</Link>
+            <Link to="/termos-de-uso">Termos de Uso</Link>
           </div>
           <div className="footer-col">
             <h4 className="sans">Suporte</h4>
-            <a href="#">FAQ</a>
-            <a href="#">Trocas e Devoluções</a>
-            <a href="#">Garantia</a>
-            <a href="#">Rastreio</a>
+            <Link to="/faq">FAQ</Link>
+            <Link to="/trocas-e-devolucoes">Trocas e Devoluções</Link>
+            <Link to="/garantia">Garantia</Link>
+            <Link to="/rastreio">Rastreio</Link>
           </div>
         </div>
 

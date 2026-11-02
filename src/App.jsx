@@ -10,6 +10,7 @@ import Categories from './pages/Categories';
 import Offers from './pages/Offers';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import LegalPage from './pages/LegalPage';
 import './styles/global.css';
 
 export default function App() {
@@ -27,6 +28,12 @@ export default function App() {
                 <Route path="ofertas" element={<Offers />} />
                 <Route path="sobre" element={<About />} />
                 <Route path="contato" element={<Contact />} />
+                <Route path="politica-de-privacidade" element={<LegalPage page="privacidade" />} />
+                <Route path="termos-de-uso" element={<LegalPage page="termos" />} />
+                <Route path="faq" element={<LegalPage page="faq" />} />
+                <Route path="trocas-e-devolucoes" element={<LegalPage page="trocas" />} />
+                <Route path="garantia" element={<LegalPage page="garantia" />} />
+                <Route path="rastreio" element={<LegalPage page="rastreio" />} />
               </Route>
             </Routes>
           </BrowserRouter>

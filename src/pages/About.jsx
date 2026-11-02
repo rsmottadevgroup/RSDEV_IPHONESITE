@@ -1,280 +1,114 @@
-import { useState } from 'react';
-import { LogIn, LogOut, PackagePlus, Trash2, Upload } from 'lucide-react';
-import { categories, formatPrice } from '../data/products';
-import { useAuth } from '../context/AuthContext';
-import { useProducts } from '../context/ProductsContext';
+import { ArrowRight, BadgeCheck, ShieldCheck, Smartphone, Star, Truck } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import './About.css';
 
+const values = [
+  {
+    icon: Smartphone,
+    title: 'Tecnologia de verdade',
+    text: 'Oferecemos celulares e acessórios selecionados com foco em desempenho, qualidade de imagem e experiência premium.'
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Confiança e segurança',
+    text: 'Cada compra é acompanhada por suporte transparente, garantia e atenção real para você não ficar sozinho.'
+  },
+  {
+    icon: Truck,
+    title: 'Entrega rápida',
+    text: 'Operamos com logística pensada para chegar rápido, com cuidado e com rastreio em tempo real.'
+  }
+];
+
+const highlights = [
+  'Atendimento especializado em celulares e acessórios',
+  'Produtos originais com garantia e suporte técnico',
+  'Seleção curada para quem busca desempenho e estilo',
+  'Compras seguras com experiência simples e confiável'
+];
+
 export default function About() {
-  const { session, isAdmin, loading: authLoading, isSupabaseConfigured, signIn, signOut } = useAuth();
-  const { customProducts, legacyProductCount, addProduct, removeProduct, importInitialCatalog, importLegacyProducts, uploadProductImage, loading: productsLoading, error: productsError } = useProducts();
-  const [email, setEmail] = useState('');
-  const [adminPassword, setAdminPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [busy, setBusy] = useState(false);
-  const [form, setForm] = useState({
-    name: '',
-    category: categories[0].name,
-    price: '',
-    originalPrice: '',
-    image: '',
-    color: '',
-    storage: '',
-    description: ''
-  });
-
-  const handleAdminAccess = async event => {
-    event.preventDefault();
-    setBusy(true);
-    setError('');
-    setMessage('');
-    try {
-      await signIn(email, adminPassword);
-    } catch (loginError) {
-      setError(loginError.message || 'Não foi possível entrar.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleProductSubmit = async event => {
-    event.preventDefault();
-    const price = Number(form.price);
-    const originalPrice = Number(form.originalPrice) > price ? Number(form.originalPrice) : price;
-    const image = form.image.trim() || categories.find(category => category.name === form.category)?.image;
-
-    setBusy(true);
-    setError('');
-    try {
-      await addProduct({
-        name: form.name.trim(),
-        category: form.category,
-        brand: 'Apple',
-        model: '',
-        price,
-        originalPrice,
-        storage: form.storage.trim() || '-',
-        color: form.color.trim() || 'Padrão',
-        condition: 'Novo',
-        availability: 'Em estoque',
-        rating: 5,
-        reviews: 0,
-        image,
-        images: [image],
-        description: form.description.trim(),
-        specs: {},
-        colors: form.color.trim() ? [form.color.trim()] : [],
-        storages: form.storage.trim() ? [form.storage.trim()] : ['-'],
-        featured: false,
-        new: false,
-        discount: originalPrice > price ? Math.round((1 - price / originalPrice) * 100) : 0
-      });
-
-      setForm({ name: '', category: categories[0].name, price: '', originalPrice: '', image: '', color: '', storage: '', description: '' });
-      setMessage('Produto salvo no catálogo.');
-    } catch (saveError) {
-      setError(saveError.message || 'Não foi possível salvar o produto.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleImageUpload = async event => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (file.size > 5 * 1024 * 1024) {
-      setError('A imagem deve ter no máximo 5 MB.');
-      return;
-    }
-    setBusy(true);
-    setError('');
-    try {
-      const image = await uploadProductImage(file);
-      setForm(current => ({ ...current, image }));
-      setMessage('Imagem enviada.');
-    } catch (uploadError) {
-      setError(uploadError.message || 'Não foi possível enviar a imagem.');
-    } finally {
-      setBusy(false);
-      event.target.value = '';
-    }
-  };
-
-  const handleImportCatalog = async () => {
-    setBusy(true);
-    setError('');
-    try {
-      const count = await importInitialCatalog();
-      setMessage(count ? `${count} produtos importados.` : 'O catálogo inicial já está importado.');
-    } catch (importError) {
-      setError(importError.message || 'Não foi possível importar o catálogo.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleImportLegacyProducts = async () => {
-    setBusy(true);
-    setError('');
-    try {
-      const count = await importLegacyProducts();
-      setMessage(count ? `${count} produtos locais importados.` : 'Os produtos locais já estavam no catálogo.');
-    } catch (importError) {
-      setError(importError.message || 'Não foi possível importar os produtos locais.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const handleRemoveProduct = async product => {
-    setBusy(true);
-    setError('');
-    try {
-      await removeProduct(product.id);
-      setMessage(`${product.name} removido do catálogo.`);
-    } catch (removeError) {
-      setError(removeError.message || 'Não foi possível remover o produto.');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const updateField = event => {
-    setForm(current => ({ ...current, [event.target.name]: event.target.value }));
-  };
-
   return (
     <div className="about-page">
       <div className="about-hero">
         <div className="container">
-          <span className="section-label sans">Painel da loja</span>
-          <h1 className="serif">Configurações</h1>
+          <span className="section-label sans">Sobre a PowerCell</span>
+          <h1 className="serif">Tecnologia que acompanha seu dia a dia.</h1>
           <p className="about-lead">
-            Acesse a área administrativa para cadastrar produtos no catálogo.
+            A PowerCell nasceu para unir inovação, qualidade e atendimento de alto nível em uma loja de celulares pensada para quem valoriza tecnologia que funciona e impressiona.
           </p>
         </div>
       </div>
 
-      <div className="container admin-container">
-        {!isSupabaseConfigured ? (
-          <div className="admin-panel admin-login">
-            <h2 className="serif">Conecte o Supabase</h2>
-            <p className="admin-local-note">Configure VITE_SUPABASE_URL e VITE_SUPABASE_ANON_KEY no arquivo .env.local e aplique a migração do projeto para habilitar o login e o catálogo.</p>
+      <div className="container about-content">
+        <section className="about-story glass">
+          <div className="about-story-copy">
+            <span className="section-label sans">Nossa história</span>
+            <h2 className="serif">Uma loja moderna para quem vive conectado.</h2>
+            <p>
+              Desde o início, a PowerCell se dedicou a facilitar a escolha do melhor celular com base em qualidade, preço e necessidades reais de cada cliente. Nossa missão é transformar a compra de tecnologia em uma experiência simples, clara e confiável.
+            </p>
+            <p>
+              Trabalhamos com smartphones de alto desempenho, acessórios essenciais e uma curadoria focada em marcas e modelos que realmente fazem a diferença no dia a dia.
+            </p>
           </div>
-        ) : authLoading ? (
-          <div className="admin-panel admin-login"><p className="admin-local-note">Verificando acesso...</p></div>
-        ) : !isAdmin ? (
-          <form className="admin-panel admin-login" onSubmit={handleAdminAccess}>
-            <h2 className="serif">Login administrador</h2>
-            {session && <p className="admin-local-note">Esta conta não tem permissão de administrador.</p>}
-            <label>
-              E-mail
-              <input type="email" value={email} onChange={event => setEmail(event.target.value)} required autoComplete="username" />
-            </label>
-            <label>
-              Senha
-              <input type="password" value={adminPassword} onChange={event => setAdminPassword(event.target.value)} required autoComplete="current-password" />
-            </label>
-            {(error || productsError) && <p className="admin-error" role="alert">{error || productsError}</p>}
-            <button type="submit" className="btn btn-primary" disabled={busy}>
-              <LogIn size={17} /> Entrar
-            </button>
-            <p className="admin-local-note">Crie a conta no Supabase e conceda a ela o papel de administrador para liberar o painel.</p>
-          </form>
-        ) : (
-          <div className="admin-dashboard">
-            <div className="admin-dashboard-header">
-              <div>
-                <span className="section-label sans">Administrador</span>
-                <h2 className="serif">Produtos da loja</h2>
-              </div>
-              <button className="btn btn-ghost" onClick={signOut}>
-                <LogOut size={17} /> Sair
-              </button>
+
+          <div className="about-badges">
+            <div className="about-badge">
+              <Star size={20} />
+              <span>+15 mil clientes atendidos</span>
             </div>
-
-            <div className="admin-catalog-actions">
-              <p>{productsLoading ? 'Carregando produtos...' : `${customProducts.length} produtos próprios no catálogo`}</p>
-              <div>
-                {legacyProductCount > 0 && (
-                  <button className="btn btn-outline" type="button" onClick={handleImportLegacyProducts} disabled={busy || productsLoading}>
-                    Importar {legacyProductCount} {legacyProductCount === 1 ? 'produto' : 'produtos'} deste navegador
-                  </button>
-                )}
-                <button className="btn btn-outline" type="button" onClick={handleImportCatalog} disabled={busy || productsLoading}>
-                  Importar catálogo inicial
-                </button>
-              </div>
+            <div className="about-badge">
+              <BadgeCheck size={20} />
+              <span>Garantia em todos os produtos</span>
             </div>
-
-            <form className="admin-panel admin-product-form" onSubmit={handleProductSubmit}>
-              <h3 className="serif"><PackagePlus size={19} /> Novo produto</h3>
-              <div className="admin-form-grid">
-                <label className="admin-field-wide">
-                  Nome do produto
-                  <input name="name" value={form.name} onChange={updateField} required />
-                </label>
-                <label>
-                  Categoria
-                  <select name="category" value={form.category} onChange={updateField}>
-                    {categories.map(category => <option key={category.id} value={category.name}>{category.name}</option>)}
-                  </select>
-                </label>
-                <label>
-                  Preço (R$)
-                  <input name="price" type="number" min="0.01" step="0.01" value={form.price} onChange={updateField} required />
-                </label>
-                <label>
-                  Preço anterior (opcional)
-                  <input name="originalPrice" type="number" min="0" step="0.01" value={form.originalPrice} onChange={updateField} />
-                </label>
-                <label>
-                  Cor
-                  <input name="color" value={form.color} onChange={updateField} />
-                </label>
-                <label>
-                  Armazenamento / modelo
-                  <input name="storage" value={form.storage} onChange={updateField} />
-                </label>
-                <label className="admin-field-wide">
-                  URL da imagem (opcional)
-                  <input name="image" type="url" value={form.image} onChange={updateField} placeholder="Usa uma imagem da categoria se ficar vazio" />
-                </label>
-                <label className="admin-field-wide admin-upload-field">
-                  Enviar arquivo de imagem (máximo 5 MB)
-                  <span><Upload size={16} /> Escolher imagem<input type="file" accept="image/jpeg,image/png,image/webp" onChange={handleImageUpload} disabled={busy} /></span>
-                </label>
-                <label className="admin-field-wide">
-                  Descrição
-                  <textarea name="description" rows="3" value={form.description} onChange={updateField} />
-                </label>
-              </div>
-              {(message || error || productsError) && <p className={error || productsError ? 'admin-error' : 'admin-message'} role={error || productsError ? 'alert' : 'status'}>{error || productsError || message}</p>}
-              <button type="submit" className="btn btn-primary" disabled={busy || productsLoading}><PackagePlus size={17} /> {busy ? 'Salvando...' : 'Adicionar produto'}</button>
-            </form>
-
-            <section className="admin-panel admin-product-list">
-              <h3 className="serif">Cadastrados por você <span>{customProducts.length}</span></h3>
-              {productsLoading ? (
-                <p className="admin-empty">Carregando produtos...</p>
-              ) : customProducts.length === 0 ? (
-                <p className="admin-empty">Nenhum produto cadastrado ainda.</p>
-              ) : customProducts.map(product => (
-                <div className="admin-product-row" key={product.id}>
-                  <img src={product.image} alt="" />
-                  <div>
-                    <strong>{product.name}</strong>
-                    <span>{product.category} · {formatPrice(product.price)}</span>
-                  </div>
-                  <button type="button" className="admin-remove" onClick={() => handleRemoveProduct(product)} disabled={busy} aria-label={`Excluir ${product.name}`}>
-                    <Trash2 size={17} />
-                  </button>
-                </div>
-              ))}
-            </section>
+            <div className="about-badge">
+              <Truck size={20} />
+              <span>Entrega rápida e rastreada</span>
+            </div>
           </div>
-        )}
+        </section>
+
+        <section className="about-values">
+          {values.map(({ icon: Icon, title, text }) => (
+            <article className="about-card glass" key={title}>
+              <div className="about-card-icon">
+                <Icon size={22} />
+              </div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="about-highlights glass">
+          <div>
+            <span className="section-label sans">Por que escolher</span>
+            <h2 className="serif">A PowerCell é pensada para seu estilo de vida.</h2>
+          </div>
+
+          <ul>
+            {highlights.map((highlight) => (
+              <li key={highlight}>{highlight}</li>
+            ))}
+          </ul>
+        </section>
+
+        <section className="about-cta glass">
+          <div>
+            <span className="section-label sans">Pronto para aproveitar</span>
+            <h2 className="serif">Encontre o celular ideal para você.</h2>
+          </div>
+
+          <div className="about-cta-actions">
+            <Link to="/produtos" className="btn btn-primary">
+              Ver catálogo <ArrowRight size={16} />
+            </Link>
+            <Link to="/contato" className="btn btn-outline">
+              Falar com especialista
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   );
