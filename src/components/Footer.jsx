@@ -9,7 +9,7 @@ export default function Footer() {
       <div className="container footer-content">
         <div className="footer-brand">
           <div className="footer-logo">
-            <img src="/logopower.png" style={{ width: '80%', height: 'auto' }} alt="PowerCell" />
+            <img src="/rsmottavert.png" style={{ width: '80%', height: 'auto' }} alt="PowerCell" />
           </div>
           <p>Tecnologia de ponta, em cada detalhe. Design que inspira.</p>
           <div className="footer-socials">
